@@ -37,8 +37,11 @@ def show_heatmap(df, audio_feature_headers):
 
     cmap = sns.diverging_palette(220,10, as_cmap=True)
 
-    sns.heatmap(corr, mask=mask, cmap=cmap, vmax =.6, vmin=-.4, center=0, square=True, linewidths=.5, cbar_kws={"shrink": .5})
+    sns_plot = sns.heatmap(corr, mask=mask, cmap=cmap, vmax =.6, vmin=-.4, center=0, square=True, linewidths=.5, cbar_kws={"shrink": .5})
+    sns_plot.figure.savefig("./img_graphs/HeatMap.png")
+    
     plt.show()
+  
 
 def show_relation(df):
 
@@ -103,8 +106,8 @@ if token:
 #   ********mostramos las gráficas************
 
     #show_pairplot(df, audio_feature_headers)
-    #show_heatmap(df,audio_feature_headers)
-    show_relation(df)
+    show_heatmap(df,audio_feature_headers)
+    #show_relation(df)
 
 else:
     print("Can't get token")
