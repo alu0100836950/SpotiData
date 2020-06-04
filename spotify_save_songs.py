@@ -46,10 +46,14 @@ def show_heatmap(df, audio_feature_headers):
 def show_relation(df):
 
     # De esta forma tambien podemos ver los histogramas
+#****************************************************************************************
+    #sns_plot = sns.jointplot(x='energy', y='valence', data=df, kind='reg')
+    #sns_plot = sns.jointplot(x='danceability', y='valence', data=df, kind='reg')
+    #name_graph = ""
+    #sns_plot.figure.savefig("./img_graphs/relations" + name_graph +".png")
 
-    #sns.jointplot(x='energy', y='valence', data=df, kind='reg')
-    #sns.jointplot(x='danceability', y='valence', data=df, kind='reg')
-
+#****************************************************************************************
+   
     # Otra forma de ver la relacion de dos variables
     sns_plot = sns.regplot(x='energy', y='acousticness', data=df)
     name_graph = "energy-acousticnesss"
