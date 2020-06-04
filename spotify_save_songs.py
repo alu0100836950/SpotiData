@@ -51,7 +51,10 @@ def show_relation(df):
     #sns.jointplot(x='danceability', y='valence', data=df, kind='reg')
 
     # Otra forma de ver la relacion de dos variables
-    sns.regplot(x='energy', y='acousticness', data=df)
+    sns_plot = sns.regplot(x='energy', y='acousticness', data=df)
+    name_graph = "energy-acousticnesss"
+    sns_plot.figure.savefig("./img_graphs/relations" + name_graph +".png")
+
     plt.show()
 
 def getFeature(items):
@@ -106,8 +109,8 @@ if token:
 #   ********mostramos las gráficas************
 
     #show_pairplot(df, audio_feature_headers)
-    show_heatmap(df,audio_feature_headers)
-    #show_relation(df)
+    #show_heatmap(df,audio_feature_headers)
+    show_relation(df)
 
 else:
     print("Can't get token")
