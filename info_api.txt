@@ -2,3 +2,7 @@ Client ID 23c9bd477825415f935a01597ebab104
 Client Secret a810f4eae19f40f6af6b12c35a1d58bd
 
 http://localhost:8888/callback/
+
+Data:
+- https://spotifycharts.com/regional
+- https://kworb.net/spotify/

@@ -7,6 +7,8 @@ import seaborn as sns
 import matplotlib.style as style
 import matplotlib.pyplot as plt
 import numpy as np
+from sys import argv
+import os
 
 #----------------SetUp Spotify------------------#
 scope = 'user-library-read'
@@ -52,36 +54,8 @@ def show_relation(df):
     #name_graph = ""
     #sns_plot.figure.savefig("./img_graphs/relations" + name_graph +".png")
 
-#****************************************************************************************
-   
-    # Otra forma de ver la relacion de dos variables
-    #sns_plot = sns.regplot(x='energy', y='acousticness', data=df)
-    #name_graph = "energy-acousticnesss"
-    #sns_plot.figure.savefig("./img_graphs/relations" + name_graph +".png")
-
     plt.show()
 
-def getFeature(items):
-    idList = []
-    for item in items:
-        track = item['track']
-        idList.append(track['id'])
-  
-    featuresList = sp.audio_features(idList)
-
-    result = []
-    for feature in featuresList:
-        track_id = feature['id']
-        title = sp.track(track_id)['name'].replace(',', ' ')
-        danceability = feature['danceability']
-        energy = feature['energy']
-        speechiness = feature['speechiness']
-        valence = feature['valence']
-        mode = feature['mode']
-        acousticness = feature['acousticness']
-    
-        result.append({'title': title, 'danceability': danceability, 'energy': energy, 'speechiness': speechiness, 'valence': valence, 'mode': mode, 'acousticness': acousticness})
-    return result
 
 
 
@@ -91,25 +65,43 @@ if token:
     print("Connection OK")
     print("Calculando datos...")
 
-    #PLAYLIST_ID = '37i9dQZEVXbLoATJ81JYXz'
-    PLAYLIST_ID ='65vCejKydxJt0DSThZIEpk' #FRANCE TOP 200
-    items = sp.playlist_tracks(PLAYLIST_ID)['items']
+    read_file = argv[1]
+    #print(read_file)
+    df = pd.read_csv(read_file)
+    df = df.dropna()
+
+    print(df.shape)
    
     audio_feature_headers = ['danceability', 'energy', 'speechiness', 'valence', 'mode','acousticness']
 
-    features = getFeature(items)
-  
-    with open('./data/top_200_France.csv', mode='w') as f:
-        f.write('title,danceability,acousticness,energy,speechiness,valence,mode\n')
-        for feature in features:
-            f.write(feature['title'] + ',' + str(feature['danceability']) + ',' + str(feature['acousticness']) #.encode('utf-8') a mi me peta si se lo pongo al title
-            + ',' + str(feature['energy']) + ',' + str(feature['speechiness']) + ',' + str(feature['valence']) + ','
-            + str(feature['mode']) + '\n')
+    id_songs = []
+    featuresList = []
+    result = []
 
 
-    df = pd.read_csv('./data/top_200_France.csv')
+    #obtenemos los ID's de las canciones
+    for url in df['URL']:
+        id_songs.append(url.rpartition('/')[2])
+
+
+    for id_song in id_songs:
+       featuresList += sp.audio_features(id_song) 
+
+
+    name_file = read_file.rpartition('/')[2] # return -> top_200_spain.csv
+    name_file_end = os.path.splitext(name_file)[0] # nos quedamos sin la extension
+
+    with open('./data_format/'+name_file_end + '_format'+'.csv', mode='w') as f:
+        f.write('danceability,energy,speechiness,valence,mode,acousticness\n')
+        for feature in featuresList:
+            f.write(str(feature['danceability']) + ',' + str(feature['energy']) #.encode('utf-8') a mi me peta si se lo pongo al title
+            + ',' + str(feature['speechiness']) + ',' + str(feature['valence']) + ',' + str(feature['mode']) + ','
+            + str(feature['acousticness']) + '\n')
+
+
+    df = pd.read_csv('./data_format/'+name_file_end +'_format.csv')
     df = df.dropna()
-    print(df)
+    #print(df)
     print(df.describe())
 
 #   ********mostramos las gráficas************
@@ -118,13 +110,12 @@ if token:
     show_heatmap(df,audio_feature_headers)
     show_relation(df)
 
+#   ******** COMPROBAMOS ALGUNAS COSAS *************
+
     #comprobamos que las canciones mas energicas son bailables y su valor de acoustico es muy pobre
     #lo mostramos en consola una pequeña tabla
-    high_vs_acoustic = df[(df['energy'] > 0.8) & (df['acousticness'] < 0.2)][['energy', 'acousticness', 'danceability']] # Low-acousticness - High-energy
-    print(high_vs_acoustic.head(5))
+    #high_vs_acoustic = df[(df['energy'] > 0.8) & (df['acousticness'] < 0.2)][['energy', 'acousticness', 'danceability']] # Low-acousticness - High-energy
+    #print(high_vs_acoustic.head(5))
 
 else:
     print("Can't get token")
-
-
-
