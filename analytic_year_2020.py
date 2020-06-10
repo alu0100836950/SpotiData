@@ -95,25 +95,22 @@ if token:
         f.write('date,position,track_name,title_author,danceability,energy,speechiness,valence,mode,acousticness\n')
         for i,linea in df.iterrows():
             
-            f.write(str(linea['Fecha']) + ','+ str(linea['Position']) + ','+ str(linea['Track_Name']) + ','+ str(linea['Artist']) + ','+features_to_csv(linea['URL'].rpartition('/')[2]))
+            f.write(str(linea['Fecha']) + ','+ str(linea['Position']) + ','+ str(linea['Track_Name']).replace(',','-') + ','+ str(linea['Artist']).replace(',','-') + ','+features_to_csv(linea['URL'].rpartition('/')[2]))
 
     
 
 
-
-
-
     
-    # df = pd.read_csv('./data_format/'+name_file_end +'_format.csv')
-    # df = df.dropna()
+    df_format = pd.read_csv('./data_format/'+name_file_end +'_format.csv')
+    #df = df.dropna()
 
-    # print(df.describe())
+    print(df_format.describe())
 
 #   ********mostramos las gráficas************
 
     #show_pairplot(df, audio_feature_headers)
-    # show_heatmap(df,audio_feature_headers)
-    # show_relation(df)
+    show_heatmap(df_format,audio_feature_headers)
+    show_relation(df_format)
 
 #   ******** COMPROBAMOS ALGUNAS COSAS *************
 
