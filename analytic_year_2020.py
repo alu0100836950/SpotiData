@@ -66,11 +66,12 @@ if token:
     print("Calculando datos...")
 
     read_file = argv[1]
-    #print(read_file)
+
     df = pd.read_csv(read_file)
     df = df.dropna()
 
     print(df.shape)
+   
    
     audio_feature_headers = ['danceability', 'energy', 'speechiness', 'valence', 'mode','acousticness']
 
@@ -78,36 +79,41 @@ if token:
     featuresList = []
     result = []
 
-
-    #obtenemos los ID's de las canciones
-    for url in df['URL']:
-        id_songs.append(url.rpartition('/')[2])
-
-
-    for id_song in id_songs:
-       featuresList += sp.audio_features(id_song) 
-
-
     name_file = read_file.rpartition('/')[2] # return -> top_200_spain.csv
     name_file_end = os.path.splitext(name_file)[0] # nos quedamos sin la extension
 
+
+    def features_to_csv(id_song):
+        featuresList = sp.audio_features(id_song)[0]
+        
+        string_features = str(featuresList['danceability']) + ',' + str(featuresList['energy']) + ',' + str(featuresList['speechiness']) + ',' + str(featuresList['valence']) + ',' + str(featuresList['mode']) + ','+ str(featuresList['acousticness']) + '\n'
+        
+        return string_features
+
+
     with open('./data_format/'+name_file_end + '_format'+'.csv', mode='w') as f:
-        f.write('danceability,energy,speechiness,valence,mode,acousticness\n')
-        for feature in featuresList:
-            f.write(str(feature['danceability']) + ',' + str(feature['energy']) #.encode('utf-8') a mi me peta si se lo pongo al title
-            + ',' + str(feature['speechiness']) + ',' + str(feature['valence']) + ',' + str(feature['mode']) + ','
-            + str(feature['acousticness']) + '\n')
+        f.write('date,position,track_name,title_author,danceability,energy,speechiness,valence,mode,acousticness\n')
+        for i,linea in df.iterrows():
+            
+            f.write(str(linea['Fecha']) + ','+ str(linea['Position']) + ','+ str(linea['Track_Name']) + ','+ str(linea['Artist']) + ','+features_to_csv(linea['URL'].rpartition('/')[2]))
+
+    
 
 
-    df = pd.read_csv('./data_format/'+name_file_end +'_format.csv')
-    df = df.dropna()
-    #print(df)
+
+
+
+    
+    # df = pd.read_csv('./data_format/'+name_file_end +'_format.csv')
+    # df = df.dropna()
+
+    # print(df.describe())
 
 #   ********mostramos las gráficas************
 
     #show_pairplot(df, audio_feature_headers)
-    show_heatmap(df,audio_feature_headers)
-    show_relation(df)
+    # show_heatmap(df,audio_feature_headers)
+    # show_relation(df)
 
 #   ******** COMPROBAMOS ALGUNAS COSAS *************
 
