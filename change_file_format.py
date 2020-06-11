@@ -39,13 +39,13 @@ if token:
     def features_to_csv(id_song):
         featuresList = sp.audio_features(id_song)[0]
         
-        string_features = str(featuresList['danceability']) + ',' + str(featuresList['energy']) + ',' + str(featuresList['speechiness']) + ',' + str(featuresList['valence']) + ',' + str(featuresList['mode']) + ','+ str(featuresList['acousticness']) + ','+ str(featuresList['tempo']) + ',' + str(featuresList['duration_ms']) + ',' + str(featuresList['loudness'])
+        string_features = str(featuresList['danceability']) + ',' + str(featuresList['energy']) + ',' + str(featuresList['speechiness']) + ',' + str(featuresList['valence']) + ',' + str(featuresList['mode']) + ','+ str(featuresList['acousticness']) + ','+ str(featuresList['tempo']) + ',' + str(featuresList['duration_ms']) + ',' + str(featuresList['loudness']) + ',' + str(featuresList['key'])
         
         return string_features
 
 
     with open('./data_format/'+name_file_end + '_format'+'.csv', mode='w') as f:
-        f.write('position,track_name,title_author,danceability,energy,speechiness,valence,mode,acousticness,tempo,duration_ms,loudness,URL\n')
+        f.write('position,track_name,title_author,danceability,energy,speechiness,valence,mode,acousticness,tempo,duration_ms,loudness,key,URL\n')
         for i,linea in df.iterrows():
             
             f.write(str(linea['Position']) + ','+ str(linea['Track_Name']).replace(',','-') + ','+ str(linea['Artist']).replace(',','-') + ','+ features_to_csv(linea['URL'].rpartition('/')[2]) + ',' + linea['URL'] + '\n')

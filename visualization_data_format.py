@@ -36,8 +36,8 @@ def show_heatmap(df, audio_feature_headers):
     cmap = sns.diverging_palette(220,10, as_cmap=True)
 
     sns_plot = sns.heatmap(corr, mask=mask, cmap=cmap, vmax =.6, vmin=-.4, center=0, square=True, linewidths=.5, cbar_kws={"shrink": .5})
-    #sns_plot.figure.savefig("./img_graphs/HeatMap.png")
-    #sns_plot.set_xticklabels(rotation=30)
+    sns_plot.figure.savefig('./img_graphs_'+ country + '/HeatMap.png')
+    
     plt.show()
   
 
@@ -47,8 +47,8 @@ def show_relation(df):
 #****************************************************************************************
     sns_plot = sns.jointplot(x='energy', y='valence', data=df, kind='reg')
     #sns_plot = sns.jointplot(x='danceability', y='valence', data=df, kind='reg')
-    #name_graph = ""
-    #sns_plot.figure.savefig("./img_graphs/relations" + name_graph +".png")
+    
+    sns_plot.savefig('./img_graphs_'+ country + '/relations.png')
     plt.show()
 
 
@@ -56,16 +56,18 @@ def show_top_position_min(df):
     songs_grouped = df.groupby('URL').min()
     songs_grouped_ranges = songs_grouped.groupby(pd.cut(songs_grouped["position"], np.arange(0, 51, 5))).count()
     f, ax = plt.subplots(figsize=(15, 5))
-    sns.barplot(x=songs_grouped_ranges.index.values, y=songs_grouped_ranges["position"])
+    sns_plot = sns.barplot(x=songs_grouped_ranges.index.values, y=songs_grouped_ranges["position"])
     ax.set(title="prueba", ylabel="count")
+    sns_plot.figure.savefig('./img_graphs_'+ country + '/BarMin.png')
 
 
 def show_top_position_mean(df):
     songs_grouped = df.groupby('URL').mean()
     songs_grouped_ranges = songs_grouped.groupby(pd.cut(songs_grouped["position"], np.arange(0, 51, 5))).count()
     f, ax = plt.subplots(figsize=(15, 5))
-    sns.barplot(x=songs_grouped_ranges.index.values, y=songs_grouped_ranges["position"])
+    sns_plot = sns.barplot(x=songs_grouped_ranges.index.values, y=songs_grouped_ranges["position"])
     ax.set(title="prueba", ylabel="count")
+    sns_plot.figure.savefig('./img_graphs_'+ country + '/BarMean.png')
 
 
 def tempo_to_rythm(tempo):
@@ -88,6 +90,7 @@ def show_pie(df):
     fig, ax = plt.subplots(figsize = (8, 8))
     ax.pie(gsongs['rythm'].value_counts(), labels = gsongs['rythm'].value_counts().axes[0], autopct = '%1.1f%%', shadow = True, textprops = {'fontsize': 16})
     ax.set_title('Ritmo')
+    ax.figure.savefig('./img_graphs_'+ country + '/Pie.png')
     plt.show()
 
 
@@ -95,7 +98,13 @@ def show_pie(df):
 
 read_file = argv[1]
 
-audio_feature_headers = ['danceability', 'energy', 'speechiness', 'valence', 'mode','acousticness','tempo', 'duration_ms','loudness']
+audio_feature_headers = ['danceability', 'energy', 'speechiness', 'valence', 'mode','acousticness','tempo', 'duration_ms','loudness','key']
+
+
+name_file = read_file.rpartition('/')[2] # return -> list_top_50_2020_x.csv
+name_file_end = os.path.splitext(name_file)[0] # nos quedamos sin la extension
+country = name_file_end.split('_')[4]
+
 
 
 df_format = pd.read_csv(read_file)
@@ -103,14 +112,17 @@ df_format.dropna()
 
 print(df_format.describe())
 
-#show_top_position_mean(df_format)
-#show_top_position_min(df_format)
-show_pie(df_format)
+
+
 #   ********mostramos las gráficas************
 
 #show_pairplot(df, audio_feature_headers)
-#show_heatmap(df_format,audio_feature_headers)
-#show_relation(df_format)
+show_heatmap(df_format,audio_feature_headers)
+show_relation(df_format)
+show_top_position_mean(df_format)
+show_top_position_min(df_format)
+show_pie(df_format)
+
 
 #   ******** COMPROBAMOS ALGUNAS COSAS *************
 
