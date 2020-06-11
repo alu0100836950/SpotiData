@@ -36,8 +36,8 @@ def show_heatmap(df, audio_feature_headers):
     cmap = sns.diverging_palette(220,10, as_cmap=True)
 
     sns_plot = sns.heatmap(corr, mask=mask, cmap=cmap, vmax =.6, vmin=-.4, center=0, square=True, linewidths=.5, cbar_kws={"shrink": .5})
-    sns_plot.figure.savefig("./img_graphs/HeatMap.png")
-    
+    #sns_plot.figure.savefig("./img_graphs/HeatMap.png")
+    #sns_plot.set_xticklabels(rotation=30)
     plt.show()
   
 
@@ -53,13 +53,11 @@ def show_relation(df):
     plt.show()
 
 
-
-
 #------- Programa principal -------#
 
 read_file = argv[1]
 
-audio_feature_headers = ['danceability', 'energy', 'speechiness', 'valence', 'mode','acousticness']
+audio_feature_headers = ['danceability', 'energy', 'speechiness', 'valence', 'mode','acousticness','tempo', 'duration_ms','loudness']
 
 
 df_format = pd.read_csv(read_file)
