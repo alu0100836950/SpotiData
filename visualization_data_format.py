@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sys import argv
 import os
+from wordcloud import WordCloud, STOPWORDS
 
 
 
@@ -93,6 +94,45 @@ def show_pie(df):
     ax.figure.savefig('./img_graphs_'+ country + '/Pie.png')
     plt.show()
 
+    #De esta forma analizamos las canciones del top10 para visualizar que tipo de tempo predomina en el top10
+    ax_ = sns.barplot(x='position', y='rythm', data=gsongs[gsongs['position'] <= 10])
+    ax_.set(title="Rythm tag for the Top 20 songs", xlim=(1,10))
+    ax_.figure.savefig('./img_graphs_'+ country + '/BarHorizontal.png')
+    # Count the number of songs occurences on each group
+    print(gsongs[gsongs['position'] <= 10].groupby('rythm').count()['position'])
+
+def distribution_key_songs(df_grouped):
+  
+    gsongs = df_grouped
+    keys = np.array(['Do', 'Do#/Re♭', 'Re', 'Re#/Mi♭', 'Mi', 'Mi#/Fa♭', 'Fa', 'Fa#/Sol♭', 'Sol', 'Sol#/La♭', 'La', 'La#/Si♭', 'Si', 'Si#/Do♭'])
+    
+
+    keys_top10 = pd.Series(keys[gsongs[gsongs['position']<10]['key']])
+    keys_count = keys_top10.value_counts()
+    
+
+    f, ax = plt.subplots(figsize=(15,5))
+    sns.barplot(x=keys_count.axes[0], y=keys_count.values)
+    ax.set(title="Tonos mas repetidos en el top 10", label="Numero de canciones")
+    ax.figure.savefig('./img_graphs_'+ country + '/distribution_key.png')
+
+
+def words_used(df_grouped):
+    gsongs = df_grouped
+    top_10_title = gsongs[gsongs["position"] <= 10]['track_name'].values
+    
+    wc = WordCloud(stopwords=STOPWORDS).generate(" ".join(top_10_title))
+
+    plt.figure(figsize=(80,80))
+
+    plt.subplot(1,2,2)
+    plt.imshow(wc)
+    plt.title('Palabras mas repetidas', fontsize=30)
+    plt.axis("off")
+
+    plt.savefig('./img_graphs_'+ country + '/words_repeat.png')
+    plt.show()
+
 
 #------- Programa principal -------#
 
@@ -106,28 +146,36 @@ name_file_end = os.path.splitext(name_file)[0] # nos quedamos sin la extension
 country = name_file_end.split('_')[4]
 
 
+# ************CARGAMOS EL FICHERO, ELIMINAMOS NULOS Y REUSMEN DE LOS DATOS
 
 df_format = pd.read_csv(read_file)
 df_format.dropna()
+
+songs_grouped = df_format.groupby('URL').min()
 
 print(df_format.describe())
 
 
 
-#   ********mostramos las gráficas************
+#   ********MOSTRAMOS LAS GRAFICAS************
 
-#show_pairplot(df, audio_feature_headers)
-show_heatmap(df_format,audio_feature_headers)
-show_relation(df_format)
-show_top_position_mean(df_format)
-show_top_position_min(df_format)
-show_pie(df_format)
+#show_pairplot(df_format, audio_feature_headers)
+#show_heatmap(df_format,audio_feature_headers)
+#show_relation(df_format)
+#show_top_position_mean(df_format)
+#show_top_position_min(df_format)
+#show_pie(df_format)
+#distribution_key_songs(songs_grouped)
+words_used(songs_grouped)
+
+
 
 
 #   ******** COMPROBAMOS ALGUNAS COSAS *************
 
 #comprobamos que las canciones mas energicas son bailables y su valor de acoustico es muy pobre
 #lo mostramos en consola una pequeña tabla
+
 high_vs_acoustic = df_format[(df_format['energy'] > 0.8) & (df_format['acousticness'] < 0.2)][['energy', 'acousticness', 'danceability']] # Low-acousticness - High-energy
 #print(high_vs_acoustic.head(5))
 
