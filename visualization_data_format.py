@@ -116,11 +116,12 @@ def distribution_key_songs(df_grouped):
     ax.set(title="Tonos mas repetidos en el top 10", label="Numero de canciones")
     ax.figure.savefig('./img_graphs_'+ country + '/distribution_key.png')
 
+    #print(keys_count.axes[0].values)
+
 
 def words_used(df_grouped):
     gsongs = df_grouped
     top_10_title = gsongs[gsongs["position"] <= 10]['track_name'].values
-    
     wc = WordCloud(stopwords=STOPWORDS).generate(" ".join(top_10_title))
 
     plt.figure(figsize=(80,80))
@@ -165,7 +166,7 @@ print(df_format.describe())
 #show_top_position_mean(df_format)
 #show_top_position_min(df_format)
 #show_pie(df_format)
-#distribution_key_songs(songs_grouped)
+distribution_key_songs(songs_grouped)
 words_used(songs_grouped)
 
 
