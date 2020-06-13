@@ -90,6 +90,44 @@ getTopMinData('spain').then(res => {
 })
 
 
+
+let getTopMeanData = country => {
+    return new Promise((res, rej) => {
+        $.ajax({
+            url: `/topmean?country=${country}`,
+            success: response => {
+                response = JSON.parse(response)
+                let data = [
+                    {
+                        x: ['0-5', '5-10', '10-15', '15-20', '20-25', '25-30', '30-35', '35-40', '40-45', '45-50'],
+                        y: response.y,
+                        type: 'bar'
+                    }
+                ]
+                res(data)
+            }
+        })
+    })
+}
+
+
+getTopMeanData('spain').then(res => {
+    console.log('holi!')
+    let layout = {
+        paper_bgcolor: 'rgba(0, 0, 0, 0)',
+        plot_bgcolor: 'rgba(0, 0, 0, 0)',
+        font: {
+            color: 'white'
+        }
+    }
+    Plotly.newPlot('top-mean', res, layout)
+    getTopMeanData('germany').then(res => { Plotly.addTraces('top-mean', res) })
+    getTopMeanData('finland').then(res => { Plotly.addTraces('top-mean', res) })
+    getTopMeanData('turkey').then(res => { Plotly.addTraces('top-mean', res) })
+});
+
+
+
 let drawPie = (country, plotId) => {
     $.ajax({
         url: `/pie?country=${country}`,
@@ -153,3 +191,10 @@ getKeys('spain').then(res => {
     getKeys('finland').then(res => { Plotly.addTraces('keys', res) })
     getKeys('turkey').then(res => { Plotly.addTraces('keys', res) })
 })
+
+
+$('#word-img').attr('src', 'static/images/germany.png')
+$('#word-select').change(function() {
+    $('#word-img').attr('src', `static/images/${this.value}.png`)
+})
+

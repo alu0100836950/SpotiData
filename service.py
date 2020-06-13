@@ -24,6 +24,7 @@ def get_dir(country):
     return 'data_format/list_top_50_2020_' + country + '_format.csv'
 
 
+
 @app.route('/heatMap')
 def show_heatmap():
     country = request.args.get('country')
@@ -44,6 +45,7 @@ def show_heatmap():
     return json.dumps(row_list)
 
 
+
 @app.route('/relation')
 def show_relation():
     country = request.args.get('country')
@@ -56,6 +58,7 @@ def show_relation():
     return json.dumps({'x': df[x].values.tolist(), 'y': df[y].values.tolist()})
 
 
+
 @app.route('/topmin')
 def show_top_position_min():
     country = request.args.get('country')
@@ -65,21 +68,18 @@ def show_top_position_min():
     songs_grouped = df.groupby('URL').min()
     songs_grouped_ranges = songs_grouped.groupby(pd.cut(songs_grouped["position"], np.arange(0, 51, 5))).count()
     return json.dumps({'y': songs_grouped_ranges['position'].values.tolist()})
-    #f, ax = plt.subplots(figsize=(15, 5))
-    #sns_plot = sns.barplot(x=songs_grouped_ranges.index.values, y=songs_grouped_ranges["position"])
-    #ax.set(title="prueba", ylabel="count")
 
 
 
-def show_top_position_mean(country):
+@app.route('/topmean')
+def show_top_position_mean():
+    country = request.args.get('country')
     df_format = pd.read_csv(get_dir(country))
     df_format.dropna()
     df = df_format
     songs_grouped = df.groupby('URL').mean()
     songs_grouped_ranges = songs_grouped.groupby(pd.cut(songs_grouped["position"], np.arange(0, 51, 5))).count()
-    f, ax = plt.subplots(figsize=(15, 5))
-    sns_plot = sns.barplot(x=songs_grouped_ranges.index.values, y=songs_grouped_ranges["position"])
-    ax.set(title="prueba", ylabel="count")
+    return json.dumps({'y': songs_grouped_ranges['position'].values.tolist()})
 
 
 
@@ -110,6 +110,7 @@ def show_pie():
     return json.dumps({'labels': gsongs['rythm'].value_counts().axes[0].values.tolist(), 'values': serie})
 
 
+
 @app.route('/keys')
 def distribution_key_songs():
     country = request.args.get('country')
@@ -120,28 +121,22 @@ def distribution_key_songs():
     keys = np.array(['Do', 'Do#/Re♭', 'Re', 'Re#/Mi♭', 'Mi', 'Mi#/Fa♭', 'Fa', 'Fa#/Sol♭', 'Sol', 'Sol#/La♭', 'La', 'La#/Si♭', 'Si', 'Si#/Do♭'])
     keys_top10 = pd.Series(keys[gsongs[gsongs['position']<10]['key']])
     keys_count = keys_top10.value_counts()
-    print(keys.tolist())
-    print(keys_count.values.tolist())
-    return json.dumps({'x': keys.tolist(), 'y': keys_count.values.tolist()})
-    #f, ax = plt.subplots(figsize=(15,5))
-    #sns.barplot(x=keys_count.axes[0], y=keys_count.values)
-    #ax.set(title="Tonos mas repetidos en el top 10", label="Numero de canciones")
+    return json.dumps({'x': keys_count.axes[0].values.tolist(), 'y': keys_count.values.tolist()})
 
 
 
-def words_used(country):
-    df_format = pd.read_csv(country)
+@app.route('/words')
+def words_used():
+    country = request.args.get('country')
+    df_format = pd.read_csv(get_dir(country))
     df_format.dropna()
     df = df_format
     gsongs = df.groupby('URL').min()
-    top_10_title = gsongs[gsongs["position"] <= 10]['track_name'].values
+    top_10_title = gsongs[gsongs["position"] <= 15]['track_name'].values
     wc = WordCloud(stopwords=STOPWORDS).generate(" ".join(top_10_title))
-    plt.figure(figsize=(80,80))
-    plt.subplot(1,2,2)
-    plt.imshow(wc)
-    plt.title('Palabras mas repetidas', fontsize=30)
-    plt.axis("off")
-    plt.show()
+    wc.to_file(country + '.png')
+    return 'ok'
+
 
 
 @app.route('/')
