@@ -13,6 +13,7 @@ from wordcloud import WordCloud, STOPWORDS
 
 
 
+
 def show_pairplot(df, audio_feature_headers):
     
     
@@ -137,9 +138,8 @@ def words_used(df_grouped):
 
 #------- Programa principal -------#
 
-read_file = argv[1]
 
-audio_feature_headers = ['danceability', 'energy', 'speechiness', 'valence', 'mode','acousticness','tempo', 'duration_ms','loudness','key']
+read_file = argv[1]
 
 
 name_file = read_file.rpartition('/')[2] # return -> list_top_50_2020_x.csv
@@ -149,6 +149,7 @@ country = name_file_end.split('_')[4]
 
 # ************CARGAMOS EL FICHERO, ELIMINAMOS NULOS Y REUSMEN DE LOS DATOS
 
+audio_feature_headers = ['danceability', 'energy', 'speechiness', 'valence', 'mode','acousticness','tempo', 'duration_ms','loudness','key']
 df_format = pd.read_csv(read_file)
 df_format.dropna()
 
