@@ -1,3 +1,7 @@
+html, * {
+    font-family: 'Montserrat', sans-serif;
+}
+
 body > * {
     background: #1A1A1A
 }
@@ -30,8 +34,34 @@ body > * {
 
 
 .words {
-    width: 700px;
-    height: 350px;
+    width: 900px;
+    height: 500px;
     background-repeat: no-repeat;
     background-size: 700px 350px;
+}
+
+.country {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    border-radius: 5px;
+}
+
+.spain {
+    background-color: #007bff
+}
+
+.germany {
+    background-color: #fd7e14
+}
+
+.finland {
+    background-color: #28a745
+}
+
+.turkey {
+    background-color: #dc3545
 }

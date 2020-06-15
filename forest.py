@@ -47,7 +47,6 @@ plt.yticks(my_range, ordered_df['group'])
 plt.title("Importance of features for RandomForest", loc='left')
 plt.xlabel('Importance')
 plt.ylabel('Feature')
-#plt.show()
 
 
 X_all = songs_grouped[features]
@@ -69,5 +68,5 @@ plt.title('max_depth VS Precisión')
 plt.xlabel('max_depth')
 plt.ylabel('Precisión')
 plt.show()
-print("La mejor precisión que podemos obtener es {} con max_depth = {}".format(np.max(test_accuracy),1+test_accuracy.index(np.max(test_accuracy))))
+print("Best precision: {} with max_depth = {}".format(np.max(test_accuracy),1+test_accuracy.index(np.max(test_accuracy))))
 

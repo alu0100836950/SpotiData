@@ -1,3 +1,24 @@
+var heatLayout = {
+    width: 1000,
+    height: 600,
+    paper_bgcolor: 'rgba(0, 0, 0, 0)',
+    plot_bgcolor: 'rgba(0, 0, 0, 0)',
+    font: {
+        color: 'white'
+    }
+}
+
+var barLayout = {
+    width: 1000,
+    height: 600,
+    paper_bgcolor: 'rgba(0, 0, 0, 0)',
+    plot_bgcolor: 'rgba(0, 0, 0, 0)',
+    font: {
+        color: 'white'
+    }
+}
+
+
 let getHeatMapData = country => {
     return new Promise((res, rej) => {
         $.ajax({
@@ -18,20 +39,11 @@ let getHeatMapData = country => {
 
 
 getHeatMapData('spain').then(res => {
-    let layout = {
-        width: 1000,
-        height: 600,
-        paper_bgcolor: 'rgba(0, 0, 0, 0)',
-        plot_bgcolor: 'rgba(0, 0, 0, 0)',
-        font: {
-            color: 'white'
-        }
-    }
-    Plotly.newPlot('heatmap', res, layout)
+    Plotly.newPlot('heatmap', res, heatLayout)
 })
 
 $('#heat-select').change(function() {
-    getHeatMapData(this.value).then(res => { Plotly.newPlot('heatmap', res, layout) })
+    getHeatMapData(this.value).then(res => { Plotly.newPlot('heatmap', res, heatLayout) })
 })
 
 
@@ -64,7 +76,8 @@ let getTopMinData = country => {
                     {
                         x: ['0-5', '5-10', '10-15', '15-20', '20-25', '25-30', '30-35', '35-40', '40-45', '45-50'],
                         y: response.y,
-                        type: 'bar'
+                        type: 'bar',
+                        name: country.charAt(0).toUpperCase() + country.slice(1)
                     }
                 ]
                 res(data)
@@ -101,7 +114,8 @@ let getTopMeanData = country => {
                     {
                         x: ['0-5', '5-10', '10-15', '15-20', '20-25', '25-30', '30-35', '35-40', '40-45', '45-50'],
                         y: response.y,
-                        type: 'bar'
+                        type: 'bar',
+                        name: country.charAt(0).toUpperCase() + country.slice(1)
                     }
                 ]
                 res(data)
@@ -112,7 +126,6 @@ let getTopMeanData = country => {
 
 
 getTopMeanData('spain').then(res => {
-    console.log('holi!')
     let layout = {
         paper_bgcolor: 'rgba(0, 0, 0, 0)',
         plot_bgcolor: 'rgba(0, 0, 0, 0)',
@@ -145,6 +158,9 @@ let drawPie = (country, plotId) => {
                 plot_bgcolor: 'rgba(0, 0, 0, 0)',
                 font: {
                     color: 'white'
+                },
+                title: {
+                    text: country.charAt(0).toUpperCase() + country.slice(1)
                 }
             }
               Plotly.newPlot(plotId, data, layout);
@@ -169,6 +185,7 @@ let getKeys = country => {
                         x: response.x,
                         y: response.y,
                         type: 'bar',
+                        name: country.charAt(0).toUpperCase() + country.slice(1)
                     }
                   ];
                   res(data)
@@ -198,3 +215,59 @@ $('#word-select').change(function() {
     $('#word-img').attr('src', `static/images/${this.value}.png`)
 })
 
+
+
+let getSpider = country => {
+    return new Promise((res, rej) => {
+        $.ajax({
+            url: `/spider?country=${country}`,
+            success: response => {
+                response = JSON.parse(response)
+                let data = [
+                    {
+                        type: 'scatterpolar',
+                        r: response.values,
+                        theta: response.headers,
+                        fill: 'toself',
+                        name: country
+                    }
+                ]
+                res(data)
+            }
+        })
+    })
+}
+
+
+  
+  mylayout = {
+    width: 1000,
+    height: 600,
+    polar: {
+      radialaxis: {
+        visible: true,
+        range: [0, 1]
+      },
+      paper_bgcolor: 'rgba(0, 0, 0, 0)',
+      plot_bgcolor: 'rgba(0, 0, 0, 0)',
+      font: {
+          color: 'white'
+      }
+    },
+    showlegend: false
+  }
+  
+
+
+getSpider('spain').then(res => {
+    Plotly.newPlot("myDiv", res, mylayout)
+    getSpider('germany').then(res => {
+        Plotly.addTraces('myDiv', res)
+    })
+    getSpider('finland').then(res => {
+        Plotly.addTraces('myDiv', res)
+    })
+    getSpider('turkey').then(res => {
+        Plotly.addTraces('myDiv', res)
+    })
+  })

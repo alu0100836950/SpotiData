@@ -25,6 +25,35 @@ def get_dir(country):
 
 
 
+@app.route('/spider')
+def spider():
+    country = request.args.get('country')
+    df_format = pd.read_csv(get_dir(country))
+    df_format.dropna()
+    df = df_format
+    headers = df.describe().columns.values.tolist()
+    values = df.describe().iloc[1].tolist()
+    headers.pop(0)
+    headers.pop(4)
+    headers.pop(5)
+    headers.pop(5)
+    headers.pop(6)
+    headers.pop(5)
+
+    values.pop(0)
+    values.pop(4)
+    values.pop(5)
+    values.pop(5)
+    values.pop(6)
+    values.pop(5)
+    print(headers)
+    print(values)
+    data = {'headers': headers, 'values': values}
+    return json.dumps(data)
+
+
+
+
 @app.route('/heatMap')
 def show_heatmap():
     country = request.args.get('country')
@@ -35,9 +64,6 @@ def show_heatmap():
     corr = df[audio_feature_headers].corr()
     mask = np.zeros_like(corr, dtype=np.bool)
     mask[np.triu_indices_from(mask)] = True
-    f, ax = plt.subplots(figsize=(11,9))
-    cmap = sns.diverging_palette(220,10, as_cmap=True)
-    sns_plot = sns.heatmap(corr, mask=mask, cmap=cmap, vmax =.6, vmin=-.4, center=0, square=True, linewidths=.5, cbar_kws={"shrink": .5})
     row_list = []
     for index, rows in corr.iterrows():
         corr_list = [rows.danceability, rows.energy, rows.speechiness, rows.valence, rows.tempo, rows.acousticness, rows.duration_ms, rows.loudness, rows.key]    
@@ -54,7 +80,6 @@ def show_relation():
     df_format = pd.read_csv(get_dir(country))
     df_format.dropna()
     df = df_format
-    #sns_plot = sns.jointplot(x='energy', y='valence', data=df, kind='reg')
     return json.dumps({'x': df[x].values.tolist(), 'y': df[y].values.tolist()})
 
 
