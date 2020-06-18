@@ -25,6 +25,16 @@ def get_dir(country):
 
 
 
+
+def show_relation():
+    country = 'spain'
+    df = pd.read_csv(get_dir(country))
+    sns_plot = sns.jointplot(x='acousticness', y='energy', data=df, kind='reg', color='#81B71A')
+    sns_plot.savefig('./img_graphs_'+ country + '/relations.png')
+    plt.show()
+
+show_relation()
+
 @app.route('/spider')
 def spider():
     country = request.args.get('country')
@@ -46,8 +56,6 @@ def spider():
     values.pop(5)
     values.pop(6)
     values.pop(5)
-    print(headers)
-    print(values)
     data = {'headers': headers, 'values': values}
     return json.dumps(data)
 
@@ -69,6 +77,23 @@ def show_heatmap():
         corr_list = [rows.danceability, rows.energy, rows.speechiness, rows.valence, rows.tempo, rows.acousticness, rows.duration_ms, rows.loudness, rows.key]    
         row_list.append(corr_list)
     return json.dumps(row_list)
+
+
+
+def show_pairplot():
+    country = 'spain'#request.args.get('country')
+    df = pd.read_csv(get_dir(country))
+    df.dropna()
+    audio_feature_headers = ['danceability', 'energy', 'speechiness', 'valence', 'tempo', 'acousticness', 'duration_ms','loudness','key']
+    sns.set(style="white")
+    style.use('seaborn-poster')
+    style.use('ggplot')
+
+    splot = sns.pairplot(df[audio_feature_headers], vars=['acousticness', 'energy', 'loudness', 'danceability', 'valence'],
+    corner=True)
+    plt.show()
+    return 'ok'
+
 
 
 

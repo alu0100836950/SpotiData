@@ -29,6 +29,7 @@ let getHeatMapData = country => {
                     x: ['danceability', 'energy', 'speechiness', 'valence', 'tempo', 'acousticness', 'duration_ms', 'loudness', 'key'],
                     y: ['danceability', 'energy', 'speechiness', 'valence', 'tempo', 'acousticness', 'duration_ms', 'loudness', 'key'],
                     type: 'heatmap',
+                    colorscale: [[0, '#1A1A1A'], [0.20 ,'white'], [1, '#81B71A']],
                     hoverongaps: false
                 }]
                 res(data);
@@ -47,24 +48,6 @@ $('#heat-select').change(function() {
 })
 
 
-
-/*
-$.ajax({
-    url: '/relation?country=spain&x=energy&y=acousticness',
-    success: res => {
-        res = JSON.parse(res)
-        var data = [
-            {
-                x: res.x,
-                y: res.y,
-                type: 'scatter',
-                mode: 'markers'
-            }
-          ];
-          Plotly.newPlot('relation', data);
-    }
-})
-*/
 
 let getTopMinData = country => {
     return new Promise((res, rej) => {
@@ -253,8 +236,7 @@ let getSpider = country => {
       font: {
           color: 'white'
       }
-    },
-    showlegend: false
+    }
   }
   
 
@@ -270,4 +252,11 @@ getSpider('spain').then(res => {
     getSpider('turkey').then(res => {
         Plotly.addTraces('myDiv', res)
     })
+  })
+
+  $.ajax({
+      url: 'pairPlot',
+      success: res => {
+          console.log(res);
+      }
   })

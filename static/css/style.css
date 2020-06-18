@@ -65,3 +65,24 @@ body > * {
 .turkey {
     background-color: #dc3545
 }
+
+#pairplot {
+    height: 70%;
+    width: 70%;
+}
+
+.sp-img {
+    width: 15%;
+    height: auto;
+    margin: 10px;
+}
+
+.sp-container {
+    width: 80%
+}
+
+.pl-img {
+    width: 25%;
+    height: auto;
+    margin: 10px;
+}

@@ -31,21 +31,6 @@
 
 
         <div class="row d-flex info flex-column">
-            <h1 class="mb-5">¿Qué características son más frecuentes en cada país?</h1>
-            <h3>Analizaremos algunas características que nos ofrece la API de Spotify:</h3>
-            <p>Danceability: mide lo bailable que es una canción. A mayor valor, más sirve para bailar.</p>
-            <p>Speechiness: cuántas palabras hay en la canción. Valores por encima de 0.3 suele indicar música Rap.</p>
-            <p>Energy: la energía que transmite la canción. Las canciones rápidas y alegres, que nos incitan a movernos tienen mayor energía.</p>
-            <p>Valence: la positividad que transmite una canción.</p>
-            <p>Acousticness: indica si la canción posee muchos instrumentos eléctricos o es acústica.</p>
-            <h3>Parece que empezamos con más similitudes que diferencias. Es curioso que todos los países dibujen formas con cierto parecido</h3>
-        </div>
-        <div class="row d-flex justify-content-center">
-            <div id="myDiv"></div>
-        </div>
-
-
-        <div class="row d-flex info flex-column">
             <h1 class="mb-5">¿Qué relación hay entre las características de la música?</h1>
             <h3>El volumen y la energía de una canción están directamente relacionados</h3>
             <h3>Las canciones con un tempo más lento son menos bailables</h3>
@@ -63,6 +48,61 @@
         <div class="row d-flex justify-content-center">
             <div id="heatmap"></div>
         </div>
+
+
+        <div class="row d-flex info flex-column">
+            <h1 class="mb-5">Relación</h1>
+            <h3>Texto1</h3>
+            <h3>Texto2</h3>
+        </div>
+
+        <div class="row d-flex justify-content-center">
+            <img id="pairplot" src="/static/images/fig1.png"></img>
+
+            <div class="row d-flex justify-content-center sp-container mt-5">
+                <img class="sp-img" src="https://developer.spotify.com/assets/audio/acousticness.png" alt="">
+                <img class="sp-img" src="https://developer.spotify.com/assets/audio/energy.png" alt="">
+                <img class="sp-img" src="https://developer.spotify.com/assets/audio/loudness.png" alt="">
+                <img class="sp-img" src="https://developer.spotify.com/assets/audio/danceability.png" alt="">
+                <img class="sp-img" src="https://developer.spotify.com/assets/audio/valence.png" alt="">
+            </div>
+        </div>
+
+
+        <div class="row d-flex info flex-column">
+            <h1 class="mb-5">Detalles</h1>
+            <h3>Texto1</h3>
+            <h3>Texto2</h3>
+        </div>
+
+        <div class="row d-flex justify-content-center">
+            <img class="pl-img" src="static/images/relations-ac-en.png" alt="">
+            <img class="pl-img" src="static/images/relations-en-loud.png" alt="">
+            <img class="pl-img" src="static/images/relations-loud-ac.png" alt="">
+        </div>
+
+
+
+
+
+
+
+
+
+        <div class="row d-flex info flex-column">
+            <h1 class="mb-5">¿Qué características son más frecuentes en cada país?</h1>
+            <h3>Analizaremos algunas características que nos ofrece la API de Spotify:</h3>
+            <p>Danceability: mide lo bailable que es una canción. A mayor valor, más sirve para bailar.</p>
+            <p>Speechiness: cuántas palabras hay en la canción. Valores por encima de 0.3 suele indicar música Rap.</p>
+            <p>Energy: la energía que transmite la canción. Las canciones rápidas y alegres, que nos incitan a movernos tienen mayor energía.</p>
+            <p>Valence: la positividad que transmite una canción.</p>
+            <p>Acousticness: indica si la canción posee muchos instrumentos eléctricos o es acústica.</p>
+            <h3>Parece que empezamos con más similitudes que diferencias. Es curioso que todos los países dibujen formas con cierto parecido</h3>
+        </div>
+        <div class="row d-flex justify-content-center">
+            <div id="myDiv"></div>
+        </div>
+
 
         <div class="row d-flex info flex-column">
             <h1 class="mb-5">¿Cuántas canciones virales consiguen alcanzar la primera posición al menos una vez?</h1>
