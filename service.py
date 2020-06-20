@@ -25,7 +25,6 @@ def get_dir(country):
 
 
 
-
 def show_relation():
     country = 'spain'
     df = pd.read_csv(get_dir(country))
@@ -33,7 +32,6 @@ def show_relation():
     sns_plot.savefig('./img_graphs_'+ country + '/relations.png')
     plt.show()
 
-show_relation()
 
 @app.route('/spider')
 def spider():
