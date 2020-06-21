@@ -91,26 +91,26 @@ if token:
     print("Connection OK")
     print("Calculando datos...")
 
-#     #PLAYLIST_ID = '37i9dQZEVXbLoATJ81JYXz'
-#     PLAYLIST_ID ='65vCejKydxJt0DSThZIEpk' #FRANCE TOP 200
-#     items = sp.playlist_tracks(PLAYLIST_ID)['items']
+    #PLAYLIST_ID = '37i9dQZEVXbLoATJ81JYXz'
+    PLAYLIST_ID ='65vCejKydxJt0DSThZIEpk' #FRANCE TOP 200
+    items = sp.playlist_tracks(PLAYLIST_ID)['items']
    
-#     audio_feature_headers = ['danceability', 'energy', 'speechiness', 'valence', 'mode','acousticness']
+    audio_feature_headers = ['danceability', 'energy', 'speechiness', 'valence', 'mode','acousticness']
 
-#     features = getFeature(items)
+    features = getFeature(items)
   
-#     with open('./data/top_200_France.csv', mode='w') as f:
-#         f.write('title,danceability,acousticness,energy,speechiness,valence,mode\n')
-#         for feature in features:
-#             f.write(feature['title'] + ',' + str(feature['danceability']) + ',' + str(feature['acousticness']) #.encode('utf-8') a mi me peta si se lo pongo al title
-#             + ',' + str(feature['energy']) + ',' + str(feature['speechiness']) + ',' + str(feature['valence']) + ','
-#             + str(feature['mode']) + '\n')
+    with open('./data/top_200_France.csv', mode='w') as f:
+        f.write('title,danceability,acousticness,energy,speechiness,valence,mode\n')
+        for feature in features:
+            f.write(feature['title'] + ',' + str(feature['danceability']) + ',' + str(feature['acousticness']) #.encode('utf-8') a mi me peta si se lo pongo al title
+            + ',' + str(feature['energy']) + ',' + str(feature['speechiness']) + ',' + str(feature['valence']) + ','
+            + str(feature['mode']) + '\n')
 
 
-#     df = pd.read_csv('./data/top_200_France.csv')
-#     df = df.dropna()
-#     print(df)
-#     print(df.describe())
+    df = pd.read_csv('./data/top_200_France.csv')
+    df = df.dropna()
+    print(df)
+    print(df.describe())
 
 # #   ********mostramos las gráficas************
 
@@ -125,11 +125,11 @@ if token:
 
 
 
-    with open('results.txt', 'r') as f:
-        lines = f.readlines()
-        for line in lines:
-            id = line.split()[0].rpartition('/')[2].replace('\n', '')
-            print(sp.track(id)['name'])
+    # with open('results.txt', 'r') as f:
+    #     lines = f.readlines()
+    #     for line in lines:
+    #         id = line.split()[0].rpartition('/')[2].replace('\n', '')
+    #         print(sp.track(id)['name'])
 
 
 

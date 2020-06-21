@@ -51,7 +51,7 @@ Y = np.array(songs_grouped['success'])
 
 
 
-kmeans = KMeans(n_clusters = 3).fit(X)
+kmeans = KMeans(n_clusters = ).fit(X)
 centroids = kmeans.cluster_centers_
 labels = kmeans.predict(X)
 

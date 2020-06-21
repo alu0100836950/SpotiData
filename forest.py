@@ -8,6 +8,7 @@ from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import classification_report
 import pylab as pl
+import sklearn.metrics as metrics
 
 from sklearn.neural_network import MLPClassifier
 from sklearn.datasets import make_classification
@@ -82,11 +83,16 @@ songs_grouped['success'] = songs_grouped['position'] < 15
 songs_grouped['success'] = songs_grouped['success'].astype(int)
 Y_all = songs_grouped[predict_header]
 p = rfc.predict(X_all)
+
+print('Mean Absolute Error:', metrics.mean_absolute_error(Y_all, p))
+print('Mean Squared Error:', metrics.mean_squared_error(Y_all, p))
+print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(Y_all, p)))
 print(classification_report(Y_all, p))
 labels = ['1', '0']
 cm = confusion_matrix(Y_all, p)
 sns.heatmap(cm, annot = True, cmap="Blues")
 plt.show()
+
 Y_all['result'] = p
 print(Y_all)
 

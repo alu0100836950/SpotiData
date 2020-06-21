@@ -11,6 +11,7 @@ import pylab as pl
 
 from sklearn.neural_network import MLPClassifier
 from sklearn.datasets import make_classification
+import sklearn.metrics as metrics
 
 
 from sklearn import datasets, linear_model
@@ -79,6 +80,9 @@ songs_grouped['success'] = songs_grouped['success'].astype(int)
 Y_all = songs_grouped[predict_header]
 p = knn.predict(X_all)
 print(classification_report(Y_all, p))
+print('Mean Absolute Error:', metrics.mean_absolute_error(Y_all, p))
+print('Mean Squared Error:', metrics.mean_squared_error(Y_all, p))
+print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(Y_all, p)))
 Y_all['result'] = p
 pd.options.display.max_colwidth = 400
 print(Y_all)
