@@ -48,7 +48,7 @@ plt.yticks(my_range, ordered_df['group'])
 plt.title("Importance of features for RandomForest", loc='left')
 plt.xlabel('Importance')
 plt.ylabel('Feature')
-#plt.show()
+plt.show()
 
 # X_all = songs_grouped[features]
 # X_all = X_all.drop(['acousticness', 'duration_ms', 'loudness', 'valence', 'key', 'mode'], axis = 1)
@@ -71,18 +71,22 @@ plt.ylabel('Feature')
     
 
 
-
-rfc = RandomForestClassifier(max_depth=14, random_state=47)
+rfc = RandomForestClassifier(max_depth=13, random_state=47)
 rfc.fit(X_train, Y_train.values.ravel())
 df_predict = pd.read_csv('data_predict/list_top_50_2020_spain_last.csv')
 songs_grouped = df_predict.groupby('URL').min()
 X_all = songs_grouped[features]
+
 
 songs_grouped['success'] = songs_grouped['position'] < 15
 songs_grouped['success'] = songs_grouped['success'].astype(int)
 Y_all = songs_grouped[predict_header]
 p = rfc.predict(X_all)
 print(classification_report(Y_all, p))
+labels = ['1', '0']
+cm = confusion_matrix(Y_all, p)
+sns.heatmap(cm, annot = True, cmap="Blues")
+plt.show()
 Y_all['result'] = p
 print(Y_all)
 

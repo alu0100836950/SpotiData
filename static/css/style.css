@@ -19,8 +19,9 @@ body > * {
     padding-top: 50px;
     background: #292929;
     color: white;
-    height: 450px;
+    height: auto;
     width: 1920px;
+    margin-bottom: 100px;
 }
 
 .header {

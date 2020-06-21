@@ -26,6 +26,7 @@ print(songs_grouped)
 X = np.array(songs_grouped[['acousticness', 'energy', 'duration_ms']])
 Y = np.array(songs_grouped['success'])
 
+
 #Mostramos las características
 # fig = plt.figure()
 # ax = Axes3D(fig)
@@ -36,7 +37,7 @@ Y = np.array(songs_grouped['success'])
 # ax.scatter(X[:, 0], X[:, 1], X[:, 2], c=assign, s=60)
 
 
-# Calculando la mejor K
+#Calculando la mejor K
 # Nc = range(1,20)
 # kmeans = [KMeans(n_clusters=i) for i in Nc]
 # kmeans
@@ -48,19 +49,20 @@ Y = np.array(songs_grouped['success'])
 # plt.title('Curva')
 # plt.show()
 
-kmeans = KMeans(n_clusters = 2).fit(X)
+
+
+kmeans = KMeans(n_clusters = 3).fit(X)
 centroids = kmeans.cluster_centers_
 labels = kmeans.predict(X)
 
-colors = ['blue', 'red']
+colors = ['blue', 'red', 'green']
 assign = []
 for row in labels:
     assign.append(colors[row])
 
-print(centroids)
 
-f1 = songs_grouped['energy'].values
-f2 = songs_grouped['success'].values
+f1 = songs_grouped['acousticness'].values
+f2 = songs_grouped['danceability'].values
 
 plt.scatter(f1, f2, c=assign, s=70)
 plt.scatter(centroids[:, 0], centroids[:, 1], marker='*', c=colors, s=500)
